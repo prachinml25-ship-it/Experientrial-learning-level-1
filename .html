@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mad Libs Generator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f0ff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px #ccc;
+        }
+
+        h1 {
+            color: #6741d9;
+            font-size: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 90%;
+            padding: 9px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            margin: 15px 5px 5px;
+            padding: 10px 15px;
+            background: #6741d9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #4b2bb5;
+        }
+
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            min-height: 70px;
+            background: #f4f0ff;
+            border-radius: 8px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>MAD LIBS GENERATOR</h1>
+
+    <label for="noun">Enter a noun:</label>
+    <input type="text" id="noun" placeholder="e.g. cat">
+
+    <label for="verb">Enter a verb:</label>
+    <input type="text" id="verb" placeholder="e.g. dance">
+
+    <label for="adj">Enter an adjective:</label>
+    <input type="text" id="adj" placeholder="e.g. funny">
+
+    <label for="adv">Enter an adverb:</label>
+    <input type="text" id="adv" placeholder="e.g. quickly">
+
+    <label for="place">Enter a place:</label>
+    <input type="text" id="place" placeholder="e.g. school">
+
+    <br>
+
+    <button onclick="generateStory()">Generate Story</button>
+
+    <div id="output">Your story will appear here.</div>
+
+    <button onclick="saveStory()">Save Story</button>
+</div>
+
+<script>
+    const stories = [
+        "One day, a {adj} {noun} went to {place}. It decided to {verb} {adv} and made everyone laugh!",
+
+        "At {place}, a {adj} {noun} suddenly started to {verb} {adv}. Everyone was surprised!",
+
+        "A {adj} {noun} visited {place} and began to {verb} {adv}. It became famous!"
+    ];
+
+    function generateStory() {
+        const noun = document.getElementById("noun").value.trim();
+        const verb = document.getElementById("verb").value.trim();
+        const adj = document.getElementById("adj").value.trim();
+        const adv = document.getElementById("adv").value.trim();
+        const place = document.getElementById("place").value.trim();
+
+        if (!noun || !verb || !adj || !adv || !place) {
+            alert("Please fill in all fields!");
+            return;
+        }
+
+        let story = stories[
+            Math.floor(Math.random() * stories.length)
+        ];
+
+        story = story
+            .replaceAll("{noun}", noun)
+            .replaceAll("{verb}", verb)
+            .replaceAll("{adj}", adj)
+            .replaceAll("{adv}", adv)
+            .replaceAll("{place}", place);
+
+        document.getElementById("output").textContent = story;
+    }
+
+    function saveStory() {
+        const story = document.getElementById("output")
+            .textContent.trim();
+
+        if (
+            !story ||
+            story === "Your story will appear here."
+        ) {
+            alert("Generate a story first!");
+            return;
+        }
+
+        const blob = new Blob(
+            [story + "\n\n"],
+            { type: "text/plain" }
+        );
+
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "madlibs_stories.txt";
+        link.click();
+
+        URL.revokeObjectURL(link.href);
+        alert("Story downloaded successfully!");
+    }
+</script>
+
+</body>
+</html>
